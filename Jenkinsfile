@@ -10,7 +10,7 @@ node {
     
     stage ("Containerize the app-docker build - react client") {
         sh 'docker build --rm -t mcc-react:v1.0 .'
-        sh 'minikube image load mcc-react:v1.0
+        sh 'minikube image load mcc-react:v1.0'
     }
     
     stage ("Inspect the docker image - react client"){
@@ -33,8 +33,8 @@ node {
 			sh "docker stop mcc-react"
 			sh "kubectl create deployment mcc-react --image=mcc-react:v1.0"
 			sh "kubectl expose deployment mcc-react --type=LoadBalancer --port=80"
-			sh "kubectl set env deployment/mcc-react REACT_APP_AUTH_IP=mcc-auth:8081"
-    	    sh "kubectl set env deployment/mcc-react REACT_APP_API_IP=mcc-data:8080"   
+			sh "kubectl set env deployment/mcc-react REACT_APP_AUTH_IP=\$(kubectl get service/mcc-auth -o jsonpath='{.spec.clusterIP}'):8081"
+    	    sh "kubectl set env deployment/mcc-react REACT_APP_API_IP=\$(kubectl get service/mcc-data -o jsonpath='{.spec.clusterIP}'):8080"   
 	    }
 	  }
     }
