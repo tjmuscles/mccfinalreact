@@ -30,7 +30,6 @@ node {
 	
 	  if(response=="Yes") {
 	    stage('Deploy to Kubenetes cluster - react client') {
-			sh "docker stop mcc-react"
 			sh "kubectl create deployment mcc-react --image=mcc-react:v1.0"
 			sh "kubectl expose deployment mcc-react --type=LoadBalancer --port=80"
 			sh "kubectl set env deployment/mcc-react REACT_APP_AUTH_IP=\$(kubectl get service/mcc-auth -o jsonpath='{.spec.clusterIP}'):8081"
